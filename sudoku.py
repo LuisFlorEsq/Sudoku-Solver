@@ -9,7 +9,15 @@ tablero = [
     ["0", "0", "0", "4", "1", "9", "0", "0", "5"],
     ["0", "0", "0", "0", "8", "0", "0", "7", "9"]
 ]
-
+[['5', '3', 0, 0, '7', 0, 0, 0, 0], 
+ ['6', '4', 0, '1', '9', '5', 0, 0, 0],
+ [0, '9', '8', 0, 0, 0, 0, '6', 0], 
+ ['8', 0, 0, 0, '6', 0, 0, 0, '3'], 
+ ['4', 0, 0, '8', 0, '3', 0, 0, '1'], 
+ ['7', 0, 0, 0, '2', 0, 0, 0, '6'], 
+ [0, '6', 0, 0, 0, 0, '2', '8', 0], 
+ [0, 0, 0, '4', '1', '9', 0, 0, '5'],
+  [0, 0, 0, 0, '8', 0, 0, '7', '9']]
 
 class Sudoku:
     def __init__(self, difficulty="", board="") -> None:
@@ -21,6 +29,7 @@ class Sudoku:
             self.board = tablero
 
         if board:
+            print(f'ASDASDASDAS: {board}')
             self.board = board
         self.invert_list = list()
 
@@ -35,7 +44,7 @@ class Sudoku:
             lista = self.board
 
         return all(
-            fila.count(elemento) == 1 if elemento != '0' else True
+            fila.count(elemento) == 1 if (elemento != '0' and elemento != 0) else True
             for fila in lista
             for elemento in fila
         )

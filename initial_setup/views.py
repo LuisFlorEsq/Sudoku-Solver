@@ -33,32 +33,26 @@ def sudoku_start(request):
     return JsonResponse(results)
 
 def sudoku_Update(request):
-    if request.method == 'GET':
-        try:
-            sudoku_values = request.GET.getlist('sudoku_values[]')
-            print(sudoku_values)
-            # Asegúrate de que `sudoku_values` es una lista de listas
-            if isinstance(sudoku_values, list) and all(isinstance(row, list) for row in sudoku_values):
-                # Crear una instancia de Sudoku
-                sudoku_instance = Sudoku(board=sudoku_values)
-                
-                # Validar el Sudoku
-                if not sudoku_instance.size_validator():
-                    results = {'success': 0, 'message': 'El tamaño del sudoku no es de 9x9'}
-                elif not sudoku_instance.rows_validate():
-                    results = {'success': 0, 'message': 'No puede haber el mismo número dos veces en una fila'}
-                elif not sudoku_instance.column_validate():
-                    results = {'success': 0, 'message': 'No puede haber el mismo número dos veces en una columna'}
-                elif not sudoku_instance.validate_cells():
-                    results = {'success': 0, 'message': 'Ese número ya está en este cuadrante'}
-                else:
-                    results = {'success': 1, 'message': 'Sudoku válido'}
-            else:
-                results = {'success': 0, 'message': 'Los datos proporcionados no son válidos'}
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        sudoku_matrix = data.get('sudoku_values')
+        # Crear una instancia de Sudoku
+        sudoku_instance = Sudoku(board=sudoku_matrix)
+        
+        # Validar el Sudoku
+        if not sudoku_instance.size_validator():
+            results = {'success': 0, 'message': 'El tamaño del sudoku no es de 9x9'}
+        elif not sudoku_instance.rows_validate():
+            print(sudoku_instance.rows_validate())
+            results = {'success': 0, 'message': 'No puede haber el mismo número dos veces en una fila'}
+        elif not sudoku_instance.column_validate():
+            results = {'success': 0, 'message': 'No puede haber el mismo número dos veces en una columna'}
+        elif not sudoku_instance.validate_cells():
+            results = {'success': 0, 'message': 'Ese número ya está en este cuadrante'}
+        else:
+            results = {'success': 1, 'message': 'Sudoku válido'}
 
-        except Exception as e:
-            results = {'success': 0, 'message': f'Error: {str(e)}'}
+    except Exception as e:
+        results = {'success': 0, 'message': f'Error: {str(e)}'}
 
-        return JsonResponse(results)
-    else:
-        return JsonResponse({'success': 0, 'message': 'La solicitud debe ser de tipo GET'})
+    return JsonResponse(results)
