@@ -22,5 +22,6 @@ from initial_setup import views
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', views.config, name="home"),
-    path('Planificador_Tareas', views.PDT, name="PDT")
+    path('Sudoku', views.sudoku_start, name="Sudoku"),
+    path('UpSudo', views.sudoku_Update, name="sudoku_Update")
 ]
