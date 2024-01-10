@@ -50,7 +50,15 @@ def sudoku_Update(request):
         elif not sudoku_instance.validate_cells():
             results = {'success': 0, 'message': 'Ese número ya está en este cuadrante'}
         else:
-            results = {'success': 1, 'message': 'Sudoku válido'}
+            ceros_count = sum(1 for row in sudoku_instance.board for value in row if value == 0)
+            if ceros_count == 0:
+                results = {'success': 1, 'message': 'HAS GANADO EL SUDOKU!!!!'}
+            else:
+                results = {'success': 2, 'message': 'Sudoku válido'}
+                print('Sopas')
+            ceros_count = 0
+        
+            
 
     except Exception as e:
         results = {'success': 0, 'message': f'Error: {str(e)}'}

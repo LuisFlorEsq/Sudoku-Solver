@@ -1,23 +1,22 @@
 $(document).ready(function(){
     $('#Res_Sudoku').on('input', '.sudoku-cell', function(){
         try {
+            // Variable to clear future text (only in error cases)
+            var currentCell = $(this);
+            // Variable to get the sudoku table from html
             var sudoku_values = [];
             $('.sudoku-cell').each(function () {
                 var valor = $(this).text().trim() || 0;
                 sudoku_values.push(valor);
             });
 
-            // Organiza los valores en una matriz 9x9
+            // Put all data in matrix 9x9 form
             var sudoku_matrix = [];
             for (var i = 0; i < 9; i++) {
                 var row_values = sudoku_values.slice(i * 9, (i + 1) * 9);
                 sudoku_matrix.push(row_values);
             }
-
-            // Puedes imprimir la matriz en la consola para verificar
-            console.log("Matriz 9x9:", sudoku_matrix);
-
-            // Obtén el token CSRF del documento
+            // Safety way (Specific to Django)
             var csrftoken = getCookie('csrftoken');
 
             $.ajax({
@@ -25,11 +24,24 @@ $(document).ready(function(){
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({ 'sudoku_values': sudoku_matrix }),
-                headers: { 'X-CSRFToken': csrftoken },  // Agregar el token CSRF en la cabecera
+                headers: { 'X-CSRFToken': csrftoken },
                 success: function (response) {
-                    console.log("Respuesta AJAX:", response);
-                    if (response.success === 0)
-                        alert(response.message);
+                    
+                    if (response.success === 0){
+                        setTimeout(function(){
+                            Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.message});
+                            currentCell.empty();
+                        }, 100);
+                    }else if (response.success === 1){
+                        Swal.fire({
+                            icon: "success",
+                            title: "GENIAL!!!!",
+                            text: response.message
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error("AJAX request failed:", status, error);

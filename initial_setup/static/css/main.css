@@ -28,6 +28,7 @@ legend{
 
 table{
     width: 100%;
+    border: 2px solid rgb(0, 137, 223);
     border-collapse: collapse;
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
     text-transform: uppercase;
@@ -43,16 +44,20 @@ thead tr:first-child{
 }
 
 th, td {
+    border: 1px solid rgb(0, 137, 223);
     text-align: left;
     vertical-align: middle;
     padding: 0.2rem;
 }
 
-tr:hover:not(#firstrow) { 
-    transform: scale(1.01); 
+td:hover:not(.non-editable) { 
+    transform: scale(1.1);
+    background-color: #3c9fd5;
+    color: black;
+    border-radius: 2.4rem;
 }
 
-tr, td { 
+td { 
     transition: .3s ease-in; 
 } 
 
@@ -60,8 +65,13 @@ th, td {
     padding: 0.5rem; font-size: 1.2rem; 
 }
 
-tr:nth-child(even) {
+td:not(.non-editable) {
     background: hsla(0, 0%, 100%, 0.7);
+}
+
+.non-editable{
+    background-color: #0b557c;
+    color: white;
 }
 
 /* CLASES CREADAS */
@@ -148,6 +158,10 @@ tr:nth-child(even) {
 
 .FU{
     text-transform: uppercase;
+}
+
+.FC{
+    text-transform: capitalize;
 }
 
 .AI{

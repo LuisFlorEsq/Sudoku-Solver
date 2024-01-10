@@ -2,14 +2,13 @@
 $(document).ready(function () {
     $(".difficulty-btn").click(function () {
         var difficulty = $(this).data("difficulty");
+        $('.dff').html(difficulty);
 
         $.ajax({
             url: "Sudoku",
             type: "GET",
             data: { difficulty: difficulty },
             success: function(response) {
-                console.log(response);
-
                 if (response.success == 0)
                     alert(response.message)
                 else{
@@ -21,15 +20,13 @@ $(document).ready(function () {
                             if (sudokuBoard[row][column] == 0)
                             table += '<td class="sudoku-cell" contenteditable="true" onkeypress="return checkN(event)" oninput="limitarCaracteres(this,1);"></td>'
                             else
-                                table += '<td class="sudoku-cell">' + sudokuBoard[row][column] + '</td>'
+                                table += '<td class="sudoku-cell non-editable">' + sudokuBoard[row][column] + '</td>'
                         }
                         table += '</tr>'
                     }
                     table += '</tbody></table>'
 
                     $('#Res_Sudoku').html(table)
-
-                    console.log(sudokuBoard);
                 }
             },
             error: function(error) {
