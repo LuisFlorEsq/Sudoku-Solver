@@ -28,7 +28,8 @@ def count_incorrectCols(sudoku_matrix, N):
     
     for i in range(columns):
         
-        column_values = sudoku_matrix[i, rows-1]
+        column_values = sudoku_matrix[:, i]
+        # print(column_values)
         unique_values, counts = np.unique(column_values, return_counts=True)
         
         if np.any(counts > 1):
