@@ -1,9 +1,14 @@
-from sudoku_function import *   # File that contains the objective functions to solve
+from .sudoku_function import *   # File that contains the objective functions to solve
 
-from Population import *
-from Chromosome import *
+import numpy as np
+from .Population import *
+from .Chromosome import *
 import matplotlib.pyplot as plt
-import random
+
+seed_value = 2
+
+np.random.seed(seed_value)
+random.seed(seed_value)
 
 def plot_metrics(worst, best, mean, generations):
 
@@ -25,15 +30,14 @@ def plot_metrics(worst, best, mean, generations):
     plt.title("Convergence graph")
     plt.show()
 
-def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, function, tournament_size, elite_size, given_matrix):
-
+def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, tournament_size, elite_size, given_matrix, function=total_error):
 
     """
     Function to test the genetic algorithm, we will update the population until the stop criteria is reached
     """
 
+    print(given_matrix)
     # Default parameters
-    
     popsize = 150
     n = 9
     max_gens = 200
@@ -133,10 +137,7 @@ def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_
     return population.population[0].printChromosome()
 
 
-# seed_value = 2
 
-# np.random.seed(seed_value)
-# random.seed(seed_value)
 
 #  # Define the parameters
 
@@ -160,5 +161,6 @@ def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_
 # [4, 8, 5, 0, 0, 0, 2, 9, 3],
 # [0, 0, 6, 3, 0, 2, 8, 0, 0]
 # ])
+
 
 # print(genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, function, tournament_size, elite_size, given_matrix))
