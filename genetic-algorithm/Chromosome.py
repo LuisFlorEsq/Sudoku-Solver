@@ -79,6 +79,8 @@ class Chromosome:
         
         print("Fitness:", self.fitness)
         print("Index:", self.index)
+
+        return self.general_matrix
         
     
     def evaluateFunction(self, function):

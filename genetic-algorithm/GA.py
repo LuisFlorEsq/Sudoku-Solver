@@ -126,42 +126,39 @@ def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_
     
     # Print the solution and plot the metrics
     
-    # Print the sudoku puzzle
-
-    print("Final sudoku puzzle: ")
-    population.population[0].printChromosome()
-    
     plot_metrics(worst, best, mean, generations+1)
 
-    return 
+    # Print the sudoku puzzle
+    print("Final sudoku puzzle: ")
+    return population.population[0].printChromosome()
 
 
-seed_value = 2
+# seed_value = 2
 
-np.random.seed(seed_value)
-random.seed(seed_value)
+# np.random.seed(seed_value)
+# random.seed(seed_value)
 
- # Define the parameters
+#  # Define the parameters
 
-mutation_rate_rows = 0.3
-mutation_rate_init = 0.05
-cross_rate = 0.2
-cross_rate_rows = 0.1
-function = total_error
-tournament_size = 2
-elite_size = 50
+# mutation_rate_rows = 0.3
+# mutation_rate_init = 0.05
+# cross_rate = 0.2
+# cross_rate_rows = 0.1
+# function = total_error
+# tournament_size = 2
+# elite_size = 50
 
-# Given matrix
-given_matrix = np.array([
-[0, 0, 9, 0, 0, 0, 1, 0, 0],
-[2, 1, 7, 0, 0, 0, 3, 6, 8],
-[0, 0, 0, 2, 0, 7, 0, 0, 0],
-[0, 6, 4, 1, 0, 3, 5, 8, 0],
-[0, 7, 0, 0, 0, 0, 0, 3, 0],
-[1, 5, 0, 4, 2, 8, 0, 7, 9],
-[0, 0, 0, 5, 8, 9, 0, 0, 0],
-[4, 8, 5, 0, 0, 0, 2, 9, 3],
-[0, 0, 6, 3, 0, 2, 8, 0, 0]
-])
+# # Given matrix
+# given_matrix = np.array([
+# [0, 0, 9, 0, 0, 0, 1, 0, 0],
+# [2, 1, 7, 0, 0, 0, 3, 6, 8],
+# [0, 0, 0, 2, 0, 7, 0, 0, 0],
+# [0, 6, 4, 1, 0, 3, 5, 8, 0],
+# [0, 7, 0, 0, 0, 0, 0, 3, 0],
+# [1, 5, 0, 4, 2, 8, 0, 7, 9],
+# [0, 0, 0, 5, 8, 9, 0, 0, 0],
+# [4, 8, 5, 0, 0, 0, 2, 9, 3],
+# [0, 0, 6, 3, 0, 2, 8, 0, 0]
+# ])
 
-genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, function, tournament_size, elite_size, given_matrix)
+# print(genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, function, tournament_size, elite_size, given_matrix))
