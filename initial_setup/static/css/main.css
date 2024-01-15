@@ -26,8 +26,20 @@ legend{
     font-size: 1.4rem;
 }
 
+input[type="number"]{
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 table{
     width: 100%;
+    border: 2px solid rgb(0, 137, 223);
     border-collapse: collapse;
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
     text-transform: uppercase;
@@ -43,16 +55,20 @@ thead tr:first-child{
 }
 
 th, td {
+    border: 1px solid rgb(0, 137, 223);
     text-align: left;
     vertical-align: middle;
     padding: 0.2rem;
 }
 
-tr:hover:not(#firstrow) { 
-    transform: scale(1.01); 
+td:hover:not(.non-editable) { 
+    transform: scale(1.1);
+    background-color: #3c9fd5;
+    color: black;
+    border-radius: 2.4rem;
 }
 
-tr, td { 
+td { 
     transition: .3s ease-in; 
 } 
 
@@ -60,8 +76,13 @@ th, td {
     padding: 0.5rem; font-size: 1.2rem; 
 }
 
-tr:nth-child(even) {
+td:not(.non-editable) {
     background: hsla(0, 0%, 100%, 0.7);
+}
+
+.non-editable{
+    background-color: #0b557c;
+    color: white;
 }
 
 /* CLASES CREADAS */
@@ -80,9 +101,49 @@ tr:nth-child(even) {
     color: white;
 }
 
+.Boards{
+    appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+    display: inline-block;
+	width: 30%;
+	cursor: pointer;
+    text-align: center;
+  	height: 2.4rem;
+  	outline: 0; 
+  	border: 0;
+	border-radius: 0;
+	background: #f0f0f0;
+	color: rgb(44, 42, 42);
+    font-weight: bold;
+	font-size: 1em;
+	border:2px solid rgba(0, 0, 0, 0.737);
+    border-radius: 1rem;
+    position: relative;
+    transition: all 0.25s ease;
+    margin-bottom: 4rem;
+}
+
+.Boards:hover{
+    background: #225dc3;
+    color: white
+}
+
+.Sudoku{
+    width: 31%;
+}
+
+.difficulty-btn{
+    width: 39%;
+}
+
 .Contenedor{
     width: 100%;
-    justify-content: center;  
+    justify-content: center;
+    border-radius: 20px;
+    /* -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border: 5px solid; */
 }
 
 .Two_ColumnsC{
@@ -134,8 +195,6 @@ tr:nth-child(even) {
 }
 
 .tableContainerO, .tableContainerT{
-    width: 100%!important;
-    height: 310px;
     display: block!important;
     overflow-x: auto;
     overflow-y: auto;
@@ -148,6 +207,10 @@ tr:nth-child(even) {
 
 .FU{
     text-transform: uppercase;
+}
+
+.FC{
+    text-transform: capitalize;
 }
 
 .AI{

@@ -3,34 +3,32 @@
 
 {% block content %}
 
-<div class="DF AI Contenedor">
-    <form action="{% url 'PDT' %}">
-        <fieldset>
-            <legend>Elegir configuración del programa</legend>
-            <div class="DF Two_ColumnsC">
-                <div class="cells-input">
-                    <span>
-                        <label>Número de máquinas disponibles:</label>
-                        <input type="number" min="1" autocomplete="false" name="machine_numb" id="machine_numb" required>
-                    </span>
-                    <div class="tableContainerO" id="tableContainerO"></div>
-                </div>
-                <div class="cells-input">
-                    <span>
-                        <label>Número de tareas:</label>
-                        <input type="number" min="1" autocomplete="false" name="tasks" id="tasks" required>
-                    </span>
-                    <div class="tableContainerT" id="tableContainerT"></div>
-                </div>
-            </div>
-            <div>
-            <h3>Cargar archivos de configuración</h3>
-                <button type="button" class="BAccept" onclick="uploadFileOperations()">Máquinas disponibles y tiempo de operaciones</button>
-                <button type="button" class="BAccept" onclick="uploadFileTasks()">Trabajos a ejecutar y sus operaciones</button>
-                <button class="BAccept">Iniciar Simulación</button>
-            </div>
-        </fieldset>
-    </form>
+<form>
+    <fieldset class="Sudoku_Simulation" id="Sudoku_Simulation">
+        <legend>Elegir configuración del programa</legend>
+        <div class="tableContainerO" id="tableContainerO"></div>
+        <button type="button" class="BAccept" id="Initial_Setup" onclick="uploadFileOperations()">Cargar configuración</button>
+    </fieldset>
+</form>
+<div class="Contenedor DF AI">
+    <select class="Boards">
+        <option value="1">Tablero 1</option>
+        <option value="2">Tablero 2</option>
+    </select>
 </div>
-
+<div class="DF AI Contenedor">
+    <fieldset class="Sudoku">
+        <legend>Jugar Sudoku</legend>
+        <div class="Two_ColumnsC">
+            <h3>Difficulty:</h3>
+            <span class="dff FC"></span>
+        </div>
+        <div class="Contenedor">
+            <button type="button" class="difficulty-btn BAccept" data-difficulty="easy" id="Easy">Easy</button>
+            <button type="button" class="difficulty-btn BAccept" data-difficulty="medium" id="Medium">Medium</button>
+            <!-- <button type="button" class="difficulty-btn BAccept" data-difficulty="hard" id="Hard">Hard</button> -->
+        </div>
+        <div class="DF" id="Res_Sudoku"></div>
+    </fieldset>
+</div>
 {% endblock %}
