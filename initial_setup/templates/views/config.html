@@ -1,0 +1,34 @@
+<!-- include es para agregar todo lo de la página antes, extends es para agregarlo adentro de la página -->
+{% extends 'layout/layout.html' %}
+
+{% block content %}
+
+<form>
+    <fieldset class="Sudoku_Simulation" id="Sudoku_Simulation">
+        <legend>Elegir configuración del programa</legend>
+        <div class="tableContainerO" id="tableContainerO"></div>
+        <button type="button" class="BAccept" id="Initial_Setup" onclick="uploadFileOperations()">Cargar configuración</button>
+    </fieldset>
+</form>
+<div class="Contenedor DF AI">
+    <select class="Boards">
+        <option value="1">Tablero 1</option>
+        <option value="2">Tablero 2</option>
+    </select>
+</div>
+<div class="DF AI Contenedor">
+    <fieldset class="Sudoku">
+        <legend>Jugar Sudoku</legend>
+        <div class="Two_ColumnsC">
+            <h3>Difficulty:</h3>
+            <span class="dff FC"></span>
+        </div>
+        <div class="Contenedor">
+            <button type="button" class="difficulty-btn BAccept" data-difficulty="easy" id="Easy">Easy</button>
+            <button type="button" class="difficulty-btn BAccept" data-difficulty="medium" id="Medium">Medium</button>
+            <!-- <button type="button" class="difficulty-btn BAccept" data-difficulty="hard" id="Hard">Hard</button> -->
+        </div>
+        <div class="DF" id="Res_Sudoku"></div>
+    </fieldset>
+</div>
+{% endblock %}

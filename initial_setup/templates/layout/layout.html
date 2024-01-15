@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Sudoku</title>
+</head>
+<body>
+    <header class="FU DF header_style">
+        <h2>Sudoku</h2>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+<script type="text/javascript" src="{% static 'js/Validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bring_sudoku.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/update_sudoku.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Excel.js' %}"></script>
+</html>
