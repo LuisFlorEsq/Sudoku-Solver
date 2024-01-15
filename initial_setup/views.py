@@ -12,8 +12,9 @@ def config(request):
 def sudoku_start(request):
 
     difficulty = request.GET.get('difficulty')
+    board = request.GET.get('num_board')
     
-    sudoku_instance = Sudoku(difficulty=difficulty)
+    sudoku_instance = Sudoku(difficulty=difficulty, n_board=int(board))
 
     if sudoku_instance.size_validator() == False:
         results = {'success': 0, 'message': 'El tamaño del sudoku no es de 9x9'}
@@ -27,7 +28,7 @@ def sudoku_start(request):
     if sudoku_instance.size_validator() == True and sudoku_instance.rows_validate() == True and sudoku_instance.column_validate() == True and sudoku_instance.validate_cells() == True:
         results = {
             'mensaje': 'Sudoku cargado exitosamente',
-            'tablero_sudoku': sudoku_instance.board
+            'tablero_sudoku': sudoku_instance.board.tolist()
         }
 
     return JsonResponse(results)
@@ -36,6 +37,8 @@ def sudoku_Update(request):
     try:
         data = json.loads(request.body.decode('utf-8'))
         sudoku_matrix = data.get('sudoku_values')
+        # Hacer de una lista de string a una lista de ints
+        sudoku_matrix = [[int(value) for value in row] for row in sudoku_matrix]
         # Crear una instancia de Sudoku
         sudoku_instance = Sudoku(board=sudoku_matrix)
         
@@ -50,17 +53,17 @@ def sudoku_Update(request):
         elif not sudoku_instance.validate_cells():
             results = {'success': 0, 'message': 'Ese número ya está en este cuadrante'}
         else:
-            ceros_count = sum(1 for row in sudoku_instance.board for value in row if value == 0)
+            ceros_count = sum(1 for row in sudoku_instance.board.tolist() for value in row if value == 0)
             if ceros_count == 0:
                 results = {'success': 1, 'message': 'HAS GANADO EL SUDOKU!!!!'}
             else:
                 results = {'success': 2, 'message': 'Sudoku válido'}
-                print('Sopas')
             ceros_count = 0
-        
-            
 
     except Exception as e:
         results = {'success': 0, 'message': f'Error: {str(e)}'}
 
     return JsonResponse(results)
+
+def start_simulation(request):
+    print("hola")

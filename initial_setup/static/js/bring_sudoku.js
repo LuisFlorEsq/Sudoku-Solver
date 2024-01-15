@@ -3,11 +3,12 @@ $(document).ready(function () {
     $(".difficulty-btn").click(function () {
         var difficulty = $(this).data("difficulty");
         $('.dff').html(difficulty);
+        board = $('.Boards').val()
 
         $.ajax({
             url: "Sudoku",
             type: "GET",
-            data: { difficulty: difficulty },
+            data: { difficulty: difficulty, num_board: board },
             success: function(response) {
                 if (response.success == 0)
                     alert(response.message)
@@ -33,5 +34,6 @@ $(document).ready(function () {
                 console.log(error);
             }
         });
+        // $('.Boards').prop('disabled', 'disabled')
     });
 });

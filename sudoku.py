@@ -1,27 +1,64 @@
-tablero = [
-    ["5", "3", "0", "0", "7", "0", "0", "0", "0"],
-    ["6", "0", "0", "1", "9", "5", "0", "0", "0"],
-    ["0", "9", "8", "0", "0", "0", "0", "6", "0"],
-    ["8", "0", "0", "0", "6", "0", "0", "0", "3"],
-    ["4", "0", "0", "8", "0", "3", "0", "0", "1"],
-    ["7", "0", "0", "0", "2", "0", "0", "0", "6"],
-    ["0", "6", "0", "0", "0", "0", "2", "8", "0"],
-    ["0", "0", "0", "4", "1", "9", "0", "0", "5"],
-    ["0", "0", "0", "0", "8", "0", "0", "7", "9"]
-]
+import numpy as np
+
+easy1 = np.array([
+    [0, 0, 9, 0, 0, 0, 1, 0, 0],
+    [2, 1, 7, 0, 0, 0, 3, 6, 8],
+    [0, 0, 0, 2, 0, 7, 0, 0, 0],
+    [0, 6, 4, 1, 0, 3, 5, 8, 0],
+    [0, 7, 0, 0, 0, 0, 0, 3, 0],
+    [1, 5, 0, 4, 2, 8, 0, 7, 9],
+    [0, 0, 0, 5, 8, 9, 0, 0, 0],
+    [4, 8, 5, 0, 0, 0, 2, 9, 3],
+    [0, 0, 6, 3, 0, 2, 8, 0, 0]
+])
+
+easy2 = np.array([
+    [2, 9, 0, 7, 0, 1, 0, 0, 0],
+    [5, 3, 0, 0, 6, 0, 1, 0, 0],
+    [0, 0, 6, 3, 0, 0, 0, 4, 0],
+    [0, 0, 0, 5, 9, 0, 0, 0, 4],
+    [0, 1, 5, 0, 0, 4, 6, 8, 9],
+    [0, 0, 0, 1, 8, 0, 0, 0, 3],
+    [0, 0, 2, 6, 0, 0, 0, 9, 0],
+    [3, 6, 0, 0, 4, 0, 7, 0, 0],
+    [9, 4, 0, 8, 0, 5, 0, 0, 0]
+])
+
+medium1 = np.array([
+    [0, 1, 0, 5, 0, 6, 0, 2, 0],
+    [3, 0, 0, 0, 0, 0, 0, 0, 6],
+    [0, 0, 9, 1, 0, 4, 5, 0, 0],
+    [0, 9, 0, 0, 1, 0, 0, 4, 0],
+    [0, 7, 0, 3, 0, 2, 0, 5, 0],
+    [0, 3, 0, 0, 8, 0, 0, 6, 0],
+    [0, 0, 3, 2, 0, 7, 1, 0, 0],
+    [9, 0, 0, 0, 0, 0, 0, 0, 2],
+    [0, 5, 0, 6, 0, 1, 0, 8, 0]
+])
+
+medium2 = np.array([
+    [0, 0, 1, 0, 8, 0, 0, 0, 0],
+    [0, 0, 0, 3, 0, 4, 7, 5, 0],
+    [0, 6, 0, 0, 5, 0, 0, 0, 0],
+    [8, 0, 6, 0, 0, 2, 3, 4, 9],
+    [0, 0, 9, 0, 0, 0, 0, 0, 0],
+    [3, 0, 4, 0, 0, 8, 1, 7, 2],
+    [0, 3, 0, 0, 7, 0, 0, 0, 0],
+    [0, 0, 0, 8, 0, 1, 5, 6, 0],
+    [0, 0, 2, 0, 3, 0, 0, 0, 0]
+])
 
 class Sudoku:
-    def __init__(self, difficulty="", board="") -> None:
+    def __init__(self, n_board=1, difficulty="", board="") -> None:
         if difficulty == 'easy':
-            self.board = tablero
+            self.board = easy1 if n_board == 1 else easy2
         elif difficulty == 'medium':
-            self.board = tablero
+            self.board = medium1 if n_board == 1 else medium2
         elif difficulty == 'hard':
-            self.board = tablero
+            self.board = medium1 if n_board == 1 else medium2
 
         if board:
-            self.board = board
-        self.invert_list = list()
+            self.board = np.array(board)
 
     def size_validator(self):
         """
@@ -29,36 +66,11 @@ class Sudoku:
         """
         return len(self.board) == 9 and all(len(fila) == 9 for fila in self.board)
 
-    def rows_validate(self, lista='tablero_general'):
-        if lista == 'tablero_general':
-            lista = self.board
-
-        return all(
-            fila.count(elemento) == 1 if (elemento != '0' and elemento != 0) else True
-            for fila in lista
-            for elemento in fila
-        )
+    def rows_validate(self):
+        return np.all(np.apply_along_axis(lambda x: np.unique(x[x != 0]).size == np.count_nonzero(x[x != 0]), axis=1, arr=self.board))
 
     def column_validate(self):
-        for column in range(0, 9):
-            column_values = [self.board[row][column] for row in range(0, 9)]
-            if not self.rows_validate([column_values]):
-                return False
-        return True
+        return np.all(np.apply_along_axis(lambda x: np.unique(x[x != 0]).size == np.count_nonzero(x[x != 0]), axis=0, arr=self.board))
 
     def validate_cells(self):
-        return (
-            self.validate_3_cells(0, 3)
-            and self.validate_3_cells(3, 6)
-            and self.validate_3_cells(6, 9)
-        )
-
-    def validate_3_cells(self, range1, range2):
-        for column in range(0, 9):
-            if column == 3 or column == 6:
-                self.invert_list.clear()
-            for row in range(range1, range2):
-                self.invert_list.append(self.board[row][column])
-                if len(self.invert_list) == 9 and not self.rows_validate([self.invert_list]):
-                    return False
-        return True
+        return np.all(np.array([np.unique(self.board[i:i+3, j:j+3][self.board[i:i+3, j:j+3] != 0]).size == np.count_nonzero(self.board[i:i+3, j:j+3][self.board[i:i+3, j:j+3] != 0]) for i in range(0, 9, 3) for j in range(0, 9, 3)]))

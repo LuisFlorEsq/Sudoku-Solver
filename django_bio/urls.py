@@ -23,5 +23,6 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', views.config, name="home"),
     path('Sudoku', views.sudoku_start, name="Sudoku"),
-    path('UpSudo', views.sudoku_Update, name="sudoku_Update")
+    path('UpSudo', views.sudoku_Update, name="sudoku_Update"),
+    path('Sim', views.start_simulation, name="Sudoku_Simulation")
 ]

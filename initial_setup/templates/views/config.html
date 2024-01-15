@@ -2,19 +2,29 @@
 {% extends 'layout/layout.html' %}
 
 {% block content %}
-
-<div class="DF AI Contenedor">
+<div class="Contenedor DF AI">
+    <select class="Boards">
+        <option value="1">Tablero 1</option>
+        <option value="2">Tablero 2</option>
+    </select>
+</div>
+<form>
     <fieldset>
         <legend>Elegir configuración del programa</legend>
-        <div>
-            <div class="Two_ColumnsR">
-                <h3>Difficulty:</h3>
-                <span class="dff FC"></span>
-            </div>
-            <button type="button" class="difficulty-btn BAccept" data-difficulty="easy" id="Easy">Easy</button>
+        <button class="BAccept" >Iniciar Simulación</button>
+    </fieldset>
+</form>
+<div class="DF AI Contenedor">
+    <fieldset class="Sudoku">
+        <legend>Jugar Sudoku</legend>
+        <div class="Two_ColumnsC">
+            <h3>Difficulty:</h3>
+            <span class="dff FC"></span>
+        </div>
+        <div class="Contenedor">
+            <button type="button" class="difficulty-btn BAccept" data-diff  iculty="easy" id="Easy">Easy</button>
             <button type="button" class="difficulty-btn BAccept" data-difficulty="medium" id="Medium">Medium</button>
-            <button type="button" class="difficulty-btn BAccept" data-difficulty="hard" id="Hard">Hard</button>
-            <button class="BAccept">Iniciar Simulación</button>
+            <!-- <button type="button" class="difficulty-btn BAccept" data-difficulty="hard" id="Hard">Hard</button> -->
         </div>
         <div class="DF" id="Res_Sudoku"></div>
     </fieldset>
