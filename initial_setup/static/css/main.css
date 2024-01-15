@@ -195,8 +195,6 @@ td:not(.non-editable) {
 }
 
 .tableContainerO, .tableContainerT{
-    width: 100%!important;
-    height: 310px;
     display: block!important;
     overflow-x: auto;
     overflow-y: auto;

@@ -11,7 +11,8 @@
 <form>
     <fieldset>
         <legend>Elegir configuración del programa</legend>
-        <button class="BAccept" >Iniciar Simulación</button>
+        <div class="tableContainerO" id="tableContainerO"></div>
+        <button type="button" class="BAccept" id="Initial_Setup" onclick="uploadFileOperations()">Cargar configuración</button>
     </fieldset>
 </form>
 <div class="DF AI Contenedor">
@@ -22,7 +23,7 @@
             <span class="dff FC"></span>
         </div>
         <div class="Contenedor">
-            <button type="button" class="difficulty-btn BAccept" data-diff  iculty="easy" id="Easy">Easy</button>
+            <button type="button" class="difficulty-btn BAccept" data-difficulty="easy" id="Easy">Easy</button>
             <button type="button" class="difficulty-btn BAccept" data-difficulty="medium" id="Medium">Medium</button>
             <!-- <button type="button" class="difficulty-btn BAccept" data-difficulty="hard" id="Hard">Hard</button> -->
         </div>

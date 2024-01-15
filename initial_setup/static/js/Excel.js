@@ -1,12 +1,6 @@
 // Operations Logic
 // Function necessary to load an excel file, in this case the operations file
 function uploadFileOperations() {
-    var machineNumb = parseInt(document.getElementById('machine_numb').value);
-    if (isNaN(machineNumb) || machineNumb < 1) {
-        alert('Ingrese un número válido de máquinas antes de generar la tabla.');
-        return;
-    }
-
     var input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xlsx, .csv';
@@ -16,7 +10,7 @@ function uploadFileOperations() {
             var reader = new FileReader();
             reader.onload = function (e) {
                 var data = e.target.result;
-                processFile(data, machineNumb, 'tableContainerO');
+                processFile(data, machineNumb);
             };
             reader.readAsText(file);
         }
@@ -25,7 +19,7 @@ function uploadFileOperations() {
 }
 
 // Change the data variable to an array
-function processFile(data, numb, table) {
+function processFile(data, numb) {
     var rows = data.split('\n');
     var dataArray = rows.map(function (row) {
         if (!row) return [];  // Si la fila es null o undefined, devolver un array vacío
@@ -39,12 +33,7 @@ function processFile(data, numb, table) {
 
 // Generate a table with processed data
 function tableGenerator(dataArray, num) {
-    var tablaHTML = '<table><thead><tr>';
-    tablaHTML += '<th>Operaciones</th>';
-
-    for (var i = 1; i <= num; i++) {
-        tablaHTML += '<th>M' + i + '</th>';
-    }
+    var tablaHTML = '<table><thead><tr><th>Tasa_Muta_Fila</th><th>Tasa_Muta_Init</th><th>Tasa_Cruza</th><th>Tasa_Cruza_Fila</th><th>Tam_T</th><th>Elite_size</th><th>Tam_Pob</th><th>N</th>';
 
     tablaHTML += '</tr></thead><tbody>';
 
