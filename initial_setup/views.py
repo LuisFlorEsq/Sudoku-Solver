@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from sudoku import Sudoku
 # from django.http import HttpResponse
@@ -66,4 +66,12 @@ def sudoku_Update(request):
     return JsonResponse(results)
 
 def start_simulation(request):
-    print("hola")
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        settings = data.get('settings_simulations')
+        print(settings)
+
+        return JsonResponse({'status': 'OK'})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'error': str(e)}, status=500)
