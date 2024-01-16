@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from Chromosome import *
+from .Chromosome import *
  
 class Population:
     

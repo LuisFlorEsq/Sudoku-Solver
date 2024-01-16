@@ -33,14 +33,14 @@ function processFile(data) {
 
 // Generate a table with processed data
 function tableGenerator(dataArray) {
-    var tablaHTML = '<table class="Settings" id="Settings"><thead><tr><th>Tasa_Muta_Fila</th><th>Tasa_Muta_Init</th><th>Tasa_Cruza</th><th>Tasa_Cruza_Fila</th><th>Tam_T</th><th>Elite_size</th><th>Tam_Pob</th><th>N</th>';
+    var tablaHTML = '<table class="Settings" id="Settings"><thead><tr><th>Tasa_Muta_Fila</th><th>Tasa_Muta_Init</th><th>Tasa_Cruza</th><th>Tasa_Cruza_Fila</th><th>Tam_T</th><th>Elite_size</th>';
 
     tablaHTML += '</tr></thead><tbody>';
 
     for (var row = 1; row < dataArray.length-1; row++) {
         tablaHTML += '<tr>';
 
-        for (var col = 0; col <= 7; col++) {
+        for (var col = 0; col <= 5; col++) {
             tablaHTML += '<td contenteditable="true" onkeypress="return checkND(event)">' + dataArray[row][col] + '</td>';
         }
 
@@ -69,19 +69,89 @@ function tableGenerator(dataArray) {
             }
         });
         if(rowValues){
-            // Safety way (Specific to Django)
-            var csrftoken = getCookie('csrftoken');
-            // Send settings to GA (views.py)
-            $.ajax({
-                url: 'Sim',
-                type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'settings_simulations': rowValues }),
-                headers: { 'X-CSRFToken': csrftoken },
-                error: function (xhr, status, error) {
-                    console.error("AJAX request failed:", status, error);
+            var table = $('.dff').text()
+            if (table) {
+
+                // Safety way (Specific to Django)
+                var csrftoken = getCookie('csrftoken');
+                // Send settings to GA (views.py)
+                // Variable to get the sudoku table from html
+                var sudoku_values = [];
+                $('.sudoku-cell').each(function () {
+                    var valor = $(this).text().trim() || 0;
+                    sudoku_values.push(valor);
+                });
+
+                // Put all data in matrix 9x9 form
+                var sudoku_matrix = [];
+                for (var i = 0; i < 9; i++) {
+                    var row_values = sudoku_values.slice(i * 9, (i + 1) * 9);
+                    sudoku_matrix.push(row_values);
                 }
-            })
+
+                $.ajax({
+                    url: 'Sim',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ 'settings_simulations': rowValues, 'matrix': sudoku_matrix }),
+                    headers: { 'X-CSRFToken': csrftoken },
+                    success: function (response) {
+                        console.log(response)
+                        for (var i = 0; i < 9; i++) {
+                            for (var j = 0; j < 9; j++) {
+                                // Asigna el valor de la lista a la celda
+                                $(".sudoku tr:eq(" + i + ") td:eq(" + j + ")").text(response.result[i][j]);
+                            }
+                        }
+
+                        if (response.success === 1){
+                            $.ajax({
+                                url: 'UpSudo',
+                                type: 'POST',
+                                contentType: 'application/json; charset=utf-8',
+                                data: JSON.stringify({ 'sudoku_values': response.result }),
+                                headers: { 'X-CSRFToken': csrftoken },
+                                success: function (response) {
+                                    
+                                    if (response.success === 0){
+                                        setTimeout(function(){
+                                            Swal.fire({
+                                            icon: "error",
+                                            title: "Oops...",
+                                            text: response.message});
+                                            currentCell.empty();
+                                        }, 100);
+                                    }else if (response.success === 1){
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "GENIAL!!!!",
+                                            text: response.message
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("AJAX request failed:", status, error);
+                                }
+                            });
+                            
+                        }else if (response.success === 0){
+                            Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.message});
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error);
+                    }
+                })
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: 'Debes seleccionar una dificultad'});
+            }
+           
         }
     });
 }
