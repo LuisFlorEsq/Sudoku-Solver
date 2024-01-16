@@ -4,42 +4,78 @@ import numpy as np
 from .Population import *
 from .Chromosome import *
 import matplotlib.pyplot as plt
-import requests
-from bs4 import BeautifulSoup
+import time
 
 seed_value = 2
 
 np.random.seed(seed_value)
 random.seed(seed_value)
 
-csrf_token_global = None
+def dibujar_sudoku(matriz_sudoku, matriz_binaria):
+    # Crear la figura y los ejes
+    fig, ax = plt.subplots()
 
-def obtener_csrf_token_from_response(response):
-    global csrf_token_global
+    # Dibujar el sudoku
+    for i in range(10):
+        lw = 2 if i % 3 == 0 else 0.5
+        ax.axhline(i, color='black', lw=lw)
+        ax.axvline(i, color='black', lw=lw)
 
-    soup = BeautifulSoup(response.text, 'html.parser')
-    csrf_input = soup.find('input', {'name': 'csrfmiddlewaretoken'})
-    
-    if csrf_input:
-        csrf_token = csrf_input['value']
-        csrf_token_global = csrf_token
-        return csrf_token
-    else:
-        raise ValueError("No se pudo encontrar el token CSRF en la página.")
+    # Rellenar los valores del sudoku
+    for i in range(9):
+        for j in range(9):
+            if matriz_sudoku[i, j] != 0:
+                ax.text(j + 0.5, i + 0.5, str(matriz_sudoku[i, j]),
+                        ha='center', va='center', fontsize=12, fontweight='bold')
 
+    # Marcar en rojo los valores indicados por la matriz binaria
+    for i in range(9):
+        for j in range(9):
+            if matriz_binaria[i, j] == 1:
+                rect = plt.Rectangle((j, i), 1, 1, fill=None, edgecolor='red', linewidth=2)
+                ax.add_patch(rect)
 
-def obtener_csrf_token():
-    global csrf_token_global
+    # Configurar la apariencia
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xlim(0, 9)
+    ax.set_ylim(0, 9)
 
-    # Realiza tu solicitud GET a la vista get_csrf_token
-    url = 'http://127.0.0.1:8000/get_csrf_token/'
-    response = requests.get(url)
+    # Mostrar el sudoku
+    plt.ion()  # Modo interactivo
+    plt.show()
+    plt.pause(5)
+    plt.close()
+    plt.ioff()  # Desactivar el modo interactivo después de su uso
 
-    # Obtiene el token CSRF de la respuesta
-    csrf_token = obtener_csrf_token_from_response(response)
+def Marcar(matriz):
 
-    return csrf_token
+    # Crear una matriz para marc    ar las repeticiones con 'x'
+    marcar_matriz = np.zeros_like(matriz, dtype=int)
 
+    # Recorrer cada columna
+    for col in range(matriz.shape[1]):
+        # Encontrar los números que se repiten en la columna
+        numeros_repetidos = [item for item in set(matriz[:, col]) if list(matriz[:, col]).count(item) > 1]
+        
+        # Marcar las posiciones de los números repetidos con 'x' en la matriz de marcado
+        for num in numeros_repetidos:
+            indices = np.where(matriz[:, col] == num)[0]
+            marcar_matriz[indices, col] = 1
+
+    # Recorrer cada cuadrante 3x3
+    for fila in range(0, 9, 3):
+        for col in range(0, 9, 3):
+            # Encontrar los números que se repiten en el cuadrante
+            numeros_repetidos = [item for item in set(matriz[fila:fila+3, col:col+3].flatten()) if list(matriz[fila:fila+3, col:col+3].flatten()).count(item) > 1]
+            
+            # Marcar las posiciones de los números repetidos con 'x' en la matriz de marcado
+            for num in numeros_repetidos:
+                indices = np.where(matriz[fila:fila+3, col:col+3].flatten() == num)[0]
+                indices_fila, indices_col = np.unravel_index(indices, (3, 3))
+                marcar_matriz[fila + indices_fila, col + indices_col] = 1
+                
+    return marcar_matriz
 
 def Marcar(matriz):
 
@@ -87,6 +123,7 @@ def plot_metrics(worst, best, mean, generations):
     plt.ylabel('Fitness value')
     plt.title("Convergence graph")
     plt.show()
+    
 
 def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, tournament_size, elite_size, given_matrix, function=total_error):
 
@@ -169,37 +206,13 @@ def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_
         if population.best() == 0:
             break
     
-        if generations % 5 == 0:
+        if generations % 10 == 0:
             chequeoM = population.population[0].general_matrix
-            repetidos = Marcar(chequeoM)    
-            
-            # Obtener el token CSRF antes de la solicitud principal
-            csrf_token = obtener_csrf_token()
+            repetidos = Marcar(chequeoM)
+            matriz_invertida = np.flipud(chequeoM)
+            matriz_invertida_binaria = np.flipud(repetidos)
 
-            url = 'http://127.0.0.1:8000/Sim'  # Ajusta la URL según tu entorno local
-            response = requests.get(url)
-            print("Respuesta del servidor (HTML):", response.text)
-
-            csrf_token = obtener_csrf_token_from_response(response)
-            
-            data = {
-                'matrix': '123456789456789123789123456...',  # Ajusta tu matriz de Sudoku
-                'otra_variable': 'Valor de la otra variable',
-                'csrfmiddlewaretoken': csrf_token,
-            }
-
-            response = requests.post(url, data=data)
-
-       
-
-            if response.status_code == 200:
-                result = response.json()
-                print("Respuesta del servidor:", result.get('result'))
-            else:
-                print("Error al enviar la matriz de Sudoku:", response.status_code)
-
-
-
+            dibujar_sudoku(matriz_invertida,matriz_invertida_binaria)
 
     # Obtain the final metrics and print it
 
