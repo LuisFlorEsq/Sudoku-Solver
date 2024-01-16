@@ -96,6 +96,7 @@ function tableGenerator(dataArray) {
                     data: JSON.stringify({ 'settings_simulations': rowValues, 'matrix': sudoku_matrix }),
                     headers: { 'X-CSRFToken': csrftoken },
                     success: function (response) {
+                        console.log(response)
                         for (var i = 0; i < 9; i++) {
                             for (var j = 0; j < 9; j++) {
                                 // Asigna el valor de la lista a la celda

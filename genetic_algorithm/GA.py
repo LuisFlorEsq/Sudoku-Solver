@@ -4,11 +4,69 @@ import numpy as np
 from .Population import *
 from .Chromosome import *
 import matplotlib.pyplot as plt
+import requests
+from bs4 import BeautifulSoup
 
 seed_value = 2
 
 np.random.seed(seed_value)
 random.seed(seed_value)
+
+csrf_token_global = None
+
+def obtener_csrf_token_from_response(response):
+    global csrf_token_global
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    csrf_input = soup.find('input', {'name': 'csrfmiddlewaretoken'})
+    
+    if csrf_input:
+        csrf_token = csrf_input['value']
+        csrf_token_global = csrf_token
+        return csrf_token
+    else:
+        raise ValueError("No se pudo encontrar el token CSRF en la página.")
+
+
+def obtener_csrf_token():
+    global csrf_token_global
+
+    # Realiza tu solicitud GET a la vista get_csrf_token
+    url = 'http://127.0.0.1:8000/get_csrf_token/'
+    response = requests.get(url)
+
+    # Obtiene el token CSRF de la respuesta
+    csrf_token = obtener_csrf_token_from_response(response)
+
+    return csrf_token
+
+
+def Marcar(matriz):
+
+    # Crear una matriz para marc    ar las repeticiones con 'x'
+    marcar_matriz = np.zeros_like(matriz, dtype=int)
+
+    # Recorrer cada columna
+    for col in range(matriz.shape[1]):
+        # Encontrar los números que se repiten en la columna
+        numeros_repetidos = [item for item in set(matriz[:, col]) if list(matriz[:, col]).count(item) > 1]
+        # Marcar las posiciones de los números repetidos con 'x' en la matriz de marcado
+        for num in numeros_repetidos:
+            indices = np.where(matriz[:, col] == num)[0]
+            marcar_matriz[indices, col] = 1
+
+    # Recorrer cada cuadrante 3x3
+    for fila in range(0, 9, 3):
+        for col in range(0, 9, 3):
+            # Encontrar los números que se repiten en el cuadrante
+            numeros_repetidos = [item for item in set(matriz[fila:fila+3, col:col+3].flatten()) if list(matriz[fila:fila+3, col:col+3].flatten()).count(item) > 1]
+            # Marcar las posiciones de los números repetidos con 'x' en la matriz de marcado
+            for num in numeros_repetidos:
+                indices = np.where(matriz[fila:fila+3, col:col+3].flatten() == num)[0]
+                indices_fila, indices_col = np.unravel_index(indices, (3, 3))
+                marcar_matriz[fila + indices_fila, col + indices_col] = 1
+
+    return marcar_matriz
 
 def plot_metrics(worst, best, mean, generations):
 
@@ -109,9 +167,40 @@ def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_
         # Verify if the solution is found
         
         if population.best() == 0:
-            
             break
-        
+    
+        if generations % 5 == 0:
+            chequeoM = population.population[0].general_matrix
+            repetidos = Marcar(chequeoM)    
+            
+            # Obtener el token CSRF antes de la solicitud principal
+            csrf_token = obtener_csrf_token()
+
+            url = 'http://127.0.0.1:8000/Sim'  # Ajusta la URL según tu entorno local
+            response = requests.get(url)
+            print("Respuesta del servidor (HTML):", response.text)
+
+            csrf_token = obtener_csrf_token_from_response(response)
+            
+            data = {
+                'matrix': '123456789456789123789123456...',  # Ajusta tu matriz de Sudoku
+                'otra_variable': 'Valor de la otra variable',
+                'csrfmiddlewaretoken': csrf_token,
+            }
+
+            response = requests.post(url, data=data)
+
+       
+
+            if response.status_code == 200:
+                result = response.json()
+                print("Respuesta del servidor:", result.get('result'))
+            else:
+                print("Error al enviar la matriz de Sudoku:", response.status_code)
+
+
+
+
     # Obtain the final metrics and print it
 
     worst_value = population.worst()

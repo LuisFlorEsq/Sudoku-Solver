@@ -24,5 +24,6 @@ urlpatterns = [
     path('', views.config, name="home"),
     path('Sudoku', views.sudoku_start, name="Sudoku"),
     path('UpSudo', views.sudoku_Update, name="sudoku_Update"),
-    path('Sim', views.start_simulation, name="Sudoku_Simulation")
+    path('Sim', views.start_simulation, name="Sudoku_Simulation"),
+    path('get_csrf_token/', views.get_csrf_token, name='get_csrf_token'),
 ]

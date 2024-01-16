@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
 import numpy as np
 from sudoku import Sudoku
 from genetic_algorithm.GA import genetic_Algorithm
+from django.middleware.csrf import get_token
 # from django.http import HttpResponse
 
 # Upload all possible htmls with functions
@@ -82,10 +84,14 @@ def start_simulation(request):
         sudoku_matrix_np = np.array(sudoku_matrix)
 
         matriz = genetic_Algorithm(float(settings[0]), float(settings[1]), float(settings[2]), float(settings[3]), int(settings[4]), int(settings[5]), sudoku_matrix_np)
-       
+        print(matriz)
         results = {'success': 1, 'result': matriz.tolist()}
     
     except Exception as e:
         results = {'success': 0, 'message': f'Error: {str(e)}'}
         
     return JsonResponse(results)
+
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    return JsonResponse({'csrf_token': csrf_token})
