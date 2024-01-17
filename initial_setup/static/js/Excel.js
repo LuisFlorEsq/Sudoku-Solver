@@ -33,7 +33,7 @@ function processFile(data) {
 
 // Generate a table with processed data
 function tableGenerator(dataArray) {
-    var tablaHTML = '<table class="Settings" id="Settings"><thead><tr><th>Tasa_Muta_Fila</th><th>Tasa_Muta_Init</th><th>Tasa_Cruza</th><th>Tasa_Cruza_Fila</th><th>Tam_T</th><th>Elite_size</th>';
+    var tablaHTML = '<table class="Settings" id="Settings"><thead><tr><th>Tasa_Muta_Fila</th><th>Tasa_Muta_Init</th><th>Tasa_Cruza</th><th>Tasa_Cruza_Fila</th><th>Tam_T</th><th>Elite_size</th><th>Pop_size</th><th>Max_Gens</th>';
 
     tablaHTML += '</tr></thead><tbody>';
 

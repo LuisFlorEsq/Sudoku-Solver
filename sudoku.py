@@ -48,6 +48,30 @@ medium2 = np.array([
     [0, 0, 2, 0, 3, 0, 0, 0, 0]
 ])
 
+hard1 = np.array([
+    [5, 0, 0, 0, 0, 0, 0, 0, 9],
+    [9, 0, 0, 8, 0, 5, 0, 0, 6],
+    [3, 0, 0, 9, 0, 7, 0, 0, 5],
+    [0, 0, 0, 0, 9, 0, 0, 0, 0],
+    [0, 9, 0, 3, 1, 0, 0, 2, 0],
+    [0, 3, 8, 0, 0, 0, 9, 4, 0],
+    [4, 0, 0, 0, 0, 0, 0, 0, 2],
+    [0, 0, 3, 5, 0, 9, 6, 0, 0],
+    [0, 0, 2, 4, 0, 1, 3, 0, 0]
+])
+
+hard2 = np.array([
+    [0, 0, 0, 4, 0, 7, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 7, 0, 0],
+    [4, 0, 0, 0, 0, 0, 0, 0, 3],
+    [0, 2, 0, 3, 0, 9, 0, 4, 0],
+    [0, 4, 0, 0, 1, 0, 0, 9, 0],
+    [0, 0, 6, 0, 0, 0, 8, 0, 0],
+    [5, 0, 0, 0, 0, 0, 0, 0, 8],
+    [0, 8, 4, 0, 6, 0, 5, 3, 0],
+    [3, 0, 0, 0, 0, 0, 0, 0, 2]
+])
+
 class Sudoku:
     def __init__(self, n_board=1, difficulty="", board="") -> None:
         if difficulty == 'easy':
@@ -55,7 +79,7 @@ class Sudoku:
         elif difficulty == 'medium':
             self.board = medium1 if n_board == 1 else medium2
         elif difficulty == 'hard':
-            self.board = medium1 if n_board == 1 else medium2
+            self.board = hard1 if n_board == 1 else hard2
 
         if board:
             self.board = np.array(board)
