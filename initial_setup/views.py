@@ -83,8 +83,8 @@ def start_simulation(request):
 
         sudoku_matrix_np = np.array(sudoku_matrix)
 
-        matriz = genetic_Algorithm(float(settings[0]), float(settings[1]), float(settings[2]), float(settings[3]), int(settings[4]), int(settings[5]), sudoku_matrix_np)
-        print(matriz)
+        print(settings)
+        matriz = genetic_Algorithm(float(settings[0]), float(settings[1]), float(settings[2]), float(settings[3]), int(settings[4]), int(settings[5]), int(settings[6]), int(settings[7]), sudoku_matrix_np)
         results = {'success': 1, 'result': matriz.tolist()}
     
     except Exception as e:

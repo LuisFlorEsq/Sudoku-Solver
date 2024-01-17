@@ -40,7 +40,7 @@ function tableGenerator(dataArray) {
     for (var row = 1; row < dataArray.length-1; row++) {
         tablaHTML += '<tr>';
 
-        for (var col = 0; col <= 5; col++) {
+        for (var col = 0; col <= 7; col++) {
             tablaHTML += '<td contenteditable="true" onkeypress="return checkND(event)">' + dataArray[row][col] + '</td>';
         }
 

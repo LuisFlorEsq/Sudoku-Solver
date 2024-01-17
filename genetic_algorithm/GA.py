@@ -125,7 +125,7 @@ def plot_metrics(worst, best, mean, generations):
     plt.show()
     
 
-def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, tournament_size, elite_size, given_matrix, popsize, max_gens, function=total_error):
+def genetic_Algorithm(mutation_rate_rows, mutation_rate_init, cross_rate, cross_rate_rows, tournament_size, elite_size, popsize, max_gens, given_matrix, function=total_error):
 
     """
     Function to test the genetic algorithm, we will update the population until the stop criteria is reached
